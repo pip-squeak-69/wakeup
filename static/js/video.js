@@ -11,10 +11,6 @@ function loadVideo(videoCode) {
         // Update the title
         document.getElementById('videoTitle').textContent = video.title;
 
-        // Update the video source
-        const videoSource = document.getElementById('videoSource');
-        videoSource.src = video.file;
-
         // Display the video screen
         document.getElementById("videoZone").style.display = "block";
 
