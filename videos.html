@@ -8,9 +8,8 @@
 </head>
 <body class="bg-gray-50 font-mono">
 
-        <!-- HEADER -->
-     <header class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white shadow-md">
-
+    <!-- HEADER -->
+    <header class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white shadow-md">
         <div class="max-w-7xl mx-auto px-4 py-6 flex flex-col md:flex-row justify-between items-center">
             
             <!-- Left: Logo / Title -->
@@ -18,16 +17,16 @@
 
             <!-- Right: Navigation -->
             <nav class="mt-4 md:mt-0 space-x-6 text-lg font-medium">
-                <a href="../index.html" class="hover:text-yellow-300 transition">📹 Home</a>
+                <a href="/index.html" class="hover:text-yellow-300 transition">📹 Home</a>
                 <a href="#about" class="hover:text-yellow-300 transition">🧠 About Me</a>
             </nav>
         </div>
     </header>
 
     <!-- Video Page Layout -->
-    <section class="max-w-7xl mx-auto px-6 py-12 flex">
+    <section class="max-w-7xl mx-auto px-6 py-12 flex flex-col md:flex-row">
         <!-- Sidebar (Left) -->
-        <div class="w-1/4 bg-white shadow-md rounded-lg p-6 mr-8">
+        <div class="w-full md:w-1/4 bg-white shadow-md rounded-lg p-6 mb-8 md:mb-0 md:mr-8">
             <h3 class="text-xl font-semibold text-gray-800 mb-4">Topics</h3>
             <ul class="space-y-4">
                 <li><a href="#" class="text-lg text-gray-800 hover:text-purple-500 transition" onclick="loadVideo('perturbation_1')">Perturbation Theory: Theorem 1</a></li>
@@ -41,7 +40,7 @@
             <!-- Video Player -->
             <div id="videoZone" class="aspect-w-16 aspect-h-9 mb-6" style="display: none;">
                 <video id="videoPlayer" class="w-full h-full rounded-lg" controls>
-                    <source id="videoSource" src="../static/videos/perturbation_theorem_1.mp4" type="video/mp4">
+                    <source id="videoSource" src="static/videos/perturbation_theorem_1.mp4">
                     Your browser does not support the video tag.
                 </video>
 
@@ -60,10 +59,8 @@
                 <button class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700" onclick="saveNotes()">Save Notes</button>
             </div>
         </div>
-
-
     </section>
 
-    <script src="../static/js/video.js"></script>
+    <script src="/static/js/video.js"></script>
 </body>
 </html>

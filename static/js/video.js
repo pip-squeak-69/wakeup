@@ -1,8 +1,5 @@
 const videoData = {
-    "perturbation_1": {
-        title: "Perturbation Theory: Theorem 1",
-        file: "../../../perturbation_theorem_1.mp4"
-    },
+    "perturbation_1": {title: "Perturbation Theory: Theorem 1",}
 };
 
 function loadVideo(videoCode) {
