@@ -11,7 +11,6 @@
     <!-- HEADER -->
     <header class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white shadow-md">
         <div class="max-w-7xl mx-auto px-4 py-6 flex flex-col md:flex-row justify-between items-center">
-            
             <!-- Left: Logo / Title -->
             <div class="flex items-center space-x-4">LOCK-IN</div>
 
@@ -39,7 +38,7 @@
 
             <!-- Video Player -->
             <div id="videoZone" class="aspect-w-16 aspect-h-9 mb-6" style="display: none;">
-                <video id="videoPlayer" class="w-full h-full rounded-lg" controls>
+                <video id="videoPlayer" class="w-full h-full rounded-lg" controls muted>
                     <source id="videoSource" src="static/videos/perturbation_theorem_1.mp4">
                     Your browser does not support the video tag.
                 </video>
@@ -62,73 +61,89 @@
     </section>
 
     <script>
-    const videoData = {
-        "perturbation_1": {title: "Perturbation Theory: Theorem 1",}
-    };
+        const videoData = {
+            "perturbation_1": {title: "Perturbation Theory: Theorem 1",}
+        };
 
-    function loadVideo(videoCode) {
-        const video = videoData[videoCode];
-        if (video) {
-            // Update the title
-            document.getElementById('videoTitle').textContent = video.title;
+        function loadVideo(videoCode) {
+            const video = videoData[videoCode];
+            if (video) {
+                // Update the title
+                document.getElementById('videoTitle').textContent = video.title;
 
-            // Display the video screen
-            document.getElementById("videoZone").style.display = "block";
+                // Display the video screen
+                document.getElementById("videoZone").style.display = "block";
 
-            // Load and play the video
-            const videoPlayer = document.getElementById('videoPlayer');
-            
-            // Ensure that video has been assigned correctly
-            console.log('Video source:', videoSource.src);
+                // Get the video element and update the source
+                const videoPlayer = document.getElementById('videoPlayer');
+                const videoSource = document.getElementById('videoSource');
+                
+                // Set the new video source dynamically
+                videoSource.src = `static/videos/${videoCode}.mp4`;
 
-            videoPlayer.load();  // reload the video
-            videoPlayer.play();  // play the video
-        } else {
-            alert("Video not found!");
+                // Reload and play the video
+                videoPlayer.load();  // reload the video with the new source
+                videoPlayer.play().then(function() {
+                    console.log("Video started playing");
+                }).catch(function(error) {
+                    console.error("Failed to play video:", error);
+                });
+            } else {
+                alert("Video not found!");
+            }
         }
-    }
 
-    // Function to get timestamp to the textarea
-    function getTimestamp() {
-        const videoPlayer = document.getElementById('videoPlayer');
-        const timestamp = videoPlayer.currentTime;
-        
-        // Format the timestamp as mm:ss
-        const minutes = Math.floor(timestamp / 60);
-        const seconds = Math.floor(timestamp % 60);
-        const formattedTimestamp = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+        // Function to get timestamp to the textarea
+        function getTimestamp() {
+            const videoPlayer = document.getElementById('videoPlayer');
+            const timestamp = videoPlayer.currentTime;
+            
+            // Format the timestamp as mm:ss
+            const minutes = Math.floor(timestamp / 60);
+            const seconds = Math.floor(timestamp % 60);
+            const formattedTimestamp = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
 
-        // Get the current cursor position in the textarea
-        const notes = document.getElementById('notes');
-        const cursorPos = notes.selectionStart;
+            // Get the current cursor position in the textarea
+            const notes = document.getElementById('notes');
+            const cursorPos = notes.selectionStart;
 
-        // Insert the timestamp at the cursor position
-        const textBefore = notes.value.substring(0, cursorPos);
-        const textAfter = notes.value.substring(cursorPos);
+            // Insert the timestamp at the cursor position
+            const textBefore = notes.value.substring(0, cursorPos);
+            const textAfter = notes.value.substring(cursorPos);
 
-        // Update the textarea with the timestamp at the cursor
-        notes.value = textBefore + `[${formattedTimestamp}] ` + textAfter;
+            // Update the textarea with the timestamp at the cursor
+            notes.value = textBefore + `[${formattedTimestamp}] ` + textAfter;
 
-        // Move the cursor position after the inserted timestamp
-        notes.selectionStart = notes.selectionEnd = cursorPos + formattedTimestamp.length + 4;
-        notes.focus();
-    }
+            // Move the cursor position after the inserted timestamp
+            notes.selectionStart = notes.selectionEnd = cursorPos + formattedTimestamp.length + 4;
+            notes.focus();
+        }
 
-    function saveNotes() {
-        const notes = document.getElementById('notes');
-        const text = notes.value;
+        function saveNotes() {
+            const notes = document.getElementById('notes');
+            const text = notes.value;
 
-        // Create blob with notes text
-        const blob = new Blob([text], {type: 'text/plain'});
-        const link = document.createElement('a');
+            // Create blob with notes text
+            const blob = new Blob([text], {type: 'text/plain'});
+            const link = document.createElement('a');
 
-        // Create URL
-        link.download = 'notes.txt';
-        link.href = URL.createObjectURL(blob);
+            // Create URL
+            link.download = 'notes.txt';
+            link.href = URL.createObjectURL(blob);
 
-        // Trigger download
-        link.click();
-    }
+            // Trigger download
+            link.click();
+        }
+
+        // Play video on click
+        document.getElementById('video_cta').addEventListener('click', function() {
+            let video = document.getElementById('videoPlayer');
+            video.play().then(function() {
+                console.log("Video is playing");
+            }).catch(function(error) {
+                console.log("Error playing video:", error);
+            });
+        });
     </script>
 </body>
 </html>
