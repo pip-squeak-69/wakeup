@@ -1,7 +1,7 @@
 const videoData = {
     "perturbation_1": {
         title: "Perturbation Theory: Theorem 1",
-        path: "/wakeup/assets/videos/perturbation_theorem_1.mp4"
+        path: "./assets/videos/perturbation_theorem_1.mp4"
     }
 };
 
