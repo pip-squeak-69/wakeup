@@ -38,7 +38,7 @@
 
             <!-- Video Player -->
             <div id="videoZone" class="aspect-w-16 aspect-h-9 mb-6" style="display: none;">
-                <video id="videoPlayer" class="w-full h-full rounded-lg" controls muted>
+                <video id="videoPlayer" class="w-full h-full rounded-lg" controls autoplay>
                     <source id="videoSource" src="static/videos/perturbation_theorem_1.mp4">
                     Your browser does not support the video tag.
                 </video>
@@ -77,9 +77,6 @@
                 // Get the video element and update the source
                 const videoPlayer = document.getElementById('videoPlayer');
                 const videoSource = document.getElementById('videoSource');
-                
-                // Set the new video source dynamically
-                videoSource.src = `static/videos/${videoCode}.mp4`;
 
                 // Reload and play the video
                 videoPlayer.load();  // reload the video with the new source
