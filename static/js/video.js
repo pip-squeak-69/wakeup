@@ -12,15 +12,20 @@ function loadVideo(videoCode) {
         document.getElementById('videoTitle').textContent = video.title;
 
         // Update the video source
-        document.getElementById('videoSource').src = video.file;
+        const videoSource = document.getElementById('videoSource');
+        videoSource.src = video.file;
 
         // Display the video screen
         document.getElementById("videoZone").style.display = "block";
 
         // Load and play the video
         const videoPlayer = document.getElementById('videoPlayer');
-        videoPlayer.load();
-        videoPlayer.play();
+        
+        // Ensure that video has been assigned correctly
+        console.log('Video source:', videoSource.src);
+
+        videoPlayer.load();  // reload the video
+        videoPlayer.play();  // play the video
     } else {
         alert("Video not found!");
     }
