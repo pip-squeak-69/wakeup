@@ -19,13 +19,31 @@ function loadVideo(videoCode) {
         const videoPlayer = document.getElementById('videoPlayer');
         const videoSource = document.getElementById('videoSource');
 
+        // Log the video path for debugging
+        console.log("Loading video from path:", video.path);
+
         // Update video source
         videoSource.src = video.path;
         
-        // Add error handling
-        videoPlayer.onerror = function() {
-            console.error("Error loading video:", videoPlayer.error);
-            alert("Error loading video. Please try again later.");
+        // Add error handling with detailed logging
+        videoPlayer.onerror = function(e) {
+            console.error("Video error details:", {
+                error: videoPlayer.error,
+                networkState: videoPlayer.networkState,
+                readyState: videoPlayer.readyState,
+                src: videoSource.src
+            });
+            alert("Error loading video. Please check the console for details.");
+        };
+
+        // Add load event listener
+        videoPlayer.onloadeddata = function() {
+            console.log("Video data loaded successfully");
+        };
+
+        // Add canplay event listener
+        videoPlayer.oncanplay = function() {
+            console.log("Video can play");
         };
 
         // Reload and play the video
@@ -34,7 +52,7 @@ function loadVideo(videoCode) {
             console.log("Video started playing");
         }).catch(function(error) {
             console.error("Failed to play video:", error);
-            alert("Unable to play video. Please check your browser settings.");
+            alert("Unable to play video. Please check your browser settings and console for details.");
         });
     } else {
         alert("Video not found!");
