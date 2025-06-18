@@ -1,7 +1,7 @@
 const videoData = {
     "perturbation_1": {
         title: "Perturbation Theory: Theorem 1",
-        path: "perturbation_theorem_1.mp4"
+        youtubeId: "UD5DmH-GWqY"
     }
 };
 
@@ -15,45 +15,11 @@ function loadVideo(videoCode) {
         const videoZone = document.getElementById("videoZone");
         videoZone.style.display = "block";
 
-        // Get the video element and update the source
+        // Get the video player iframe
         const videoPlayer = document.getElementById('videoPlayer');
-        const videoSource = document.getElementById('videoSource');
-
-        // Log the video path for debugging
-        console.log("Loading video from path:", video.path);
-
-        // Update video source
-        videoSource.src = video.path;
         
-        // Add error handling with detailed logging
-        videoPlayer.onerror = function(e) {
-            console.error("Video error details:", {
-                error: videoPlayer.error,
-                networkState: videoPlayer.networkState,
-                readyState: videoPlayer.readyState,
-                src: videoSource.src
-            });
-            alert("Error loading video. Please check the console for details.");
-        };
-
-        // Add load event listener
-        videoPlayer.onloadeddata = function() {
-            console.log("Video data loaded successfully");
-        };
-
-        // Add canplay event listener
-        videoPlayer.oncanplay = function() {
-            console.log("Video can play");
-        };
-
-        // Reload and play the video
-        videoPlayer.load();
-        videoPlayer.play().then(function() {
-            console.log("Video started playing");
-        }).catch(function(error) {
-            console.error("Failed to play video:", error);
-            alert("Unable to play video. Please check your browser settings and console for details.");
-        });
+        // Update the iframe src with the YouTube embed URL
+        videoPlayer.src = `https://www.youtube.com/embed/${video.youtubeId}?enablejsapi=1`;
     } else {
         alert("Video not found!");
     }
@@ -62,11 +28,12 @@ function loadVideo(videoCode) {
 // Function to get timestamp to the textarea
 function getTimestamp() {
     const videoPlayer = document.getElementById('videoPlayer');
-    const timestamp = videoPlayer.currentTime;
+    // Get the current time from the YouTube player
+    const currentTime = videoPlayer.contentWindow.postMessage('{"event":"listening"}', '*');
     
     // Format the timestamp as mm:ss
-    const minutes = Math.floor(timestamp / 60);
-    const seconds = Math.floor(timestamp % 60);
+    const minutes = Math.floor(currentTime / 60);
+    const seconds = Math.floor(currentTime % 60);
     const formattedTimestamp = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
 
     // Get the current cursor position in the textarea
