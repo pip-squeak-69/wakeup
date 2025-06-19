@@ -7,9 +7,13 @@ function onYouTubeIframeAPIReady() {
 }
 
 const videoData = {
-    "perturbation_1": {
-        title: "Perturbation Theory: Theorem 1",
-        youtubeId: "UD5DmH-GWqY"
+    "pt-intro": {
+        title: "Intro to Perturbation Theory",
+        youtubeId: "BNjeAFDjHIU"
+    },
+    "pt-l1": {
+        title: "Triangularizing a Matrix Pair That Cannot be Simultaneously Triangularized",
+        youtubeId: "cD9v_HfpkTA"
     }
 };
 
