@@ -1,10 +1,8 @@
 let player;
+let currentVideoId = null;
 
-// Initialize YouTube Player API
-function onYouTubeIframeAPIReady() {
-    // This function is called automatically by the YouTube API
-    console.log("YouTube API Ready");
-}
+const notes = document.getElementById("notes");
+
 
 const videoData = {
     "pt-intro": {
@@ -17,83 +15,95 @@ const videoData = {
     }
 };
 
+// YouTube Player API callback (required)
+function onYouTubeIframeAPIReady() {}
+
 function loadVideo(videoCode) {
+    currentVideoId = videoCode;
     const video = videoData[videoCode];
-    if (video) {
-        // Update the title
-        document.getElementById('videoTitle').textContent = video.title;
 
-        // Display the video screen
-        const videoZone = document.getElementById("videoZone");
-        videoZone.style.display = "block";
-
-        // Get the video player iframe
-        const videoPlayer = document.getElementById('videoPlayer');
-        
-        // Update the iframe src with the YouTube embed URL
-        videoPlayer.src = `https://www.youtube.com/embed/${video.youtubeId}?enablejsapi=1`;
-
-        // Create new YouTube player
-        player = new YT.Player('videoPlayer', {
-            events: {
-                'onReady': onPlayerReady,
-                'onStateChange': onPlayerStateChange
-            }
-        });
-    } else {
+    if (!video) {
         alert("Video not found!");
+        return;
     }
+
+    document.getElementById('videoTitle').textContent = video.title;
+    document.getElementById("videoZone").style.display = "block";
+
+    const videoPlayer = document.getElementById('videoPlayer');
+    videoPlayer.src = `https://www.youtube.com/embed/${video.youtubeId}?enablejsapi=1`;
+
+    player = new YT.Player('videoPlayer', {
+        events: {
+            'onReady': () => {},
+            'onStateChange': () => {}
+        }
+    });
+
+    notes.value = localStorage.getItem(currentVideoId) || "";
 }
 
-function onPlayerReady(event) {
-    console.log("Player is ready");
-}
-
-function onPlayerStateChange(event) {
-    console.log("Player state changed:", event.data);
-}
-
-// Function to get timestamp to the textarea
 function getTimestamp() {
-    if (player && player.getCurrentTime) {
-        const currentTime = player.getCurrentTime();
-        
-        // Format the timestamp as mm:ss
-        const minutes = Math.floor(currentTime / 60);
-        const seconds = Math.floor(currentTime % 60);
-        const formattedTimestamp = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
-
-        // Get the current cursor position in the textarea
-        const notes = document.getElementById('notes');
-        const cursorPos = notes.selectionStart;
-
-        // Insert the timestamp at the cursor position
-        const textBefore = notes.value.substring(0, cursorPos);
-        const textAfter = notes.value.substring(cursorPos);
-
-        // Update the textarea with the timestamp at the cursor
-        notes.value = textBefore + `[${formattedTimestamp}] ` + textAfter;
-
-        // Move the cursor position after the inserted timestamp
-        notes.selectionStart = notes.selectionEnd = cursorPos + formattedTimestamp.length + 4;
-        notes.focus();
-    } else {
-        alert("Please wait for the video to load completely");
+    if (!player || !player.getCurrentTime) {
+        alert("Please wait for the video to load completely.");
+        return;
     }
+
+    const currentTime = player.getCurrentTime();
+    const minutes = Math.floor(currentTime / 60);
+    const seconds = Math.floor(currentTime % 60);
+    const formatted = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+
+    return formatted;
+}
+
+function showTimestamp() {
+    const time = getTimestamp();
+    const cursorPos = notes.selectionStart;
+
+    notes.value = 
+        notes.value.substring(0, cursorPos) + 
+        `[${time}] ` + 
+        notes.value.substring(cursorPos);
+
+    notes.selectionStart = notes.selectionEnd = cursorPos + time.length + 4;
+    notes.focus();
 }
 
 function saveNotes() {
-    const notes = document.getElementById('notes');
-    const text = notes.value;
+    if (!currentVideoId) {
+        alert("Please select a video first.");
+        return;
+    }
 
-    // Create blob with notes text
-    const blob = new Blob([text], {type: 'text/plain'});
+    localStorage.setItem(currentVideoId, notes.value);
+}
+
+function downloadNotes() {
+    const blob = new Blob([notes.value], { type: 'text/plain' });
     const link = document.createElement('a');
 
-    // Create URL
     link.download = 'notes.txt';
     link.href = URL.createObjectURL(blob);
-
-    // Trigger download
     link.click();
-} 
+}
+
+function openWindow() {
+    const windowName = "Ask a Question"
+
+    const width = screen.width * 0.5;
+    const height = screen.height * 0.6;
+
+    // Calculate the position to center the window
+    const left = (screen.width - width) / 2;
+    const top = (screen.height - height) / 2;
+    
+    // Open the new window with specific parameters
+    const windowOptions = `width=${width},height=${height},left=${left},top=${top},resizable=no`;
+   
+    const videoTitle = videoData[currentVideoId].title;
+    const timestamp = getTimestamp();
+    const url = `../../questions.html?videoTitle=${videoTitle}&timestamp=${timestamp}`;
+
+    const newWindow = window.open(url, windowName, windowOptions);
+}

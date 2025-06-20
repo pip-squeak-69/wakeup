@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Videos</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Add YouTube Player API -->
     <script src="https://www.youtube.com/iframe_api"></script>
 </head>
 <body class="bg-gray-50 font-mono">
@@ -14,12 +13,12 @@
     <header class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white shadow-md">
         <div class="max-w-7xl mx-auto px-4 py-6 flex flex-col md:flex-row justify-between items-center">
             <!-- Left: Logo / Title -->
-            <div class="flex items-center space-x-4">LOCK-IN</div>
+            <div class="flex items-center space-x-4">LOCK-IN PIPSQUEAK</div>
 
             <!-- Right: Navigation -->
             <nav class="mt-4 md:mt-0 space-x-6 text-lg font-medium">
-                <a href="index.html" class="hover:text-yellow-300 transition">📹 Home</a>
-                <a href="#about" class="hover:text-yellow-300 transition">🧠 About Me</a>
+                <a href="index.html" class="hover:text-yellow-300 transition">Home</a>
+                <a href="#" class="hover:text-yellow-300 transition">Archives</a>
             </nav>
         </div>
     </header>
@@ -53,7 +52,8 @@
                 </div>
 
                 <div class="timestamp mt-6">
-                    <button class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-300 text-lg" onclick="getTimestamp()">Get Timestamp</button>
+                    <button class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-300 text-lg" onclick="showTimestamp()">Get Timestamp</button>
+                    <button class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-300 text-lg" onclick="openWindow()">Ask Mac a Question</button>
                 </div>
             </div>
 
@@ -65,11 +65,12 @@
 
             <div class="save mt-4">
                 <button class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-300 text-lg" onclick="saveNotes()">Save Notes</button>
+                <button class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-300 text-lg" onclick="downloadNotes()">Download Notes</button>
             </div>
         </div>
     </section>
 
-    <!-- Scripts -->
+    <!-- Script -->
     <script src="assets/js/videoPlayer.js"></script>
 </body>
 </html>
