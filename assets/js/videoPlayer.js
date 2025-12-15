@@ -12,6 +12,10 @@ const videoData = {
     "pt-l1": {
         title: "Triangularizing a Matrix Pair That Cannot be Simultaneously Triangularized",
         youtubeId: "cD9v_HfpkTA"
+    },
+    "ht-1": {
+        title: "Intro to Heat Transfer",
+        youtubeId: "2T93-VQlZgE"
     }
 };
 
