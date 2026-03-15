@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archives | Wakeup PipSqueak</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <style>
+        .fade-out {
+            opacity: 0 !important;
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            transform: scale(1.05);
+            pointer-events: none;
+        }
+        
+        .fade-in-init {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .fade-in-active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-mono overflow-x-hidden">
+
+    <div id="password-overlay" class="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-900 transition-opacity duration-700 ease-in-out">
+        <div class="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 opacity-90"></div>
+        
+        <div id="login-card" class="relative bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md text-center border-t-4 border-pink-500 mx-4 transition-all duration-700">
+            <div class="text-5xl mb-4">🔐</div>
+            <h2 class="text-3xl font-extrabold text-gray-800 mb-2">Classified Archives</h2>
+            <p class="text-gray-500 mb-6">Please enter the password to access the archives.</p>
+            
+            <div class="space-y-4">
+                <input type="password" id="password-input" 
+                    class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:outline-none transition-colors text-center text-lg" 
+                    placeholder="Enter Code">
+                
+                <button onclick="checkPassword()" 
+                    class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold py-3 rounded-lg hover:opacity-90 transform transition active:scale-95 shadow-lg">
+                    Unlock Archives
+                </button>
+            </div>
+            
+            <p id="error-msg" class="hidden mt-4 text-red-500 font-bold animate-bounce">
+                Access Denied. Try again, PipSqueak.
+            </p>
+        </div>
+    </div>
+
+    <div id="archive-content" class="hidden fade-in-init">
+        <header class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white shadow-md">
+            <div class="max-w-7xl mx-auto px-4 py-6 flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <img src="assets/images/cupcake mac.jpg" alt="Teacher Avatar" class="w-12 h-12 rounded-full border-2 border-white shadow">
+                    <h1 class="text-3xl font-extrabold tracking-wide">Professor Mac</h1>
+                </div>
+                <nav class="mt-4 md:mt-0 space-x-6 text-lg font-medium">
+                    <a href="index.html" class="hover:text-yellow-300 transition">Home</a>
+                    <a href="videos.html" class="hover:text-yellow-300 transition">Lessons</a>
+                </nav>
+            </div>
+        </header>
+
+        <main class="max-w-7xl mx-auto px-4 py-12">
+            <div class="bg-white rounded-2xl shadow-sm p-8 border border-gray-100">
+                <div class="flex items-center space-x-3 mb-6">
+                    <h2 class="text-4xl font-black text-gray-800 border-b-4 border-yellow-400 inline-block">The Archives</h2>
+                </div>
+
+                <section class="max-w-7xl mx-auto px-6 py-12 flex flex-col md:flex-row gap-8">
+                    <!-- Sidebar (Left) -->
+                    <div class="w-full md:w-1/5 bg-white rounded-lg p-6">
+                        <ul class="space-y-4">
+                            <li><a href="#" class="text-lg text-gray-800 hover:text-purple-500 transition" onclick="loadVideo('ach-dy')">Dumpy Yap During Heat Transfer</a></li>
+                            <li><a href="#" class="text-lg text-gray-800 hover:text-purple-500 transition" onclick="loadVideo('ach-mmd')">Mac's Mating Dance</a></li>
+                            <li><a href="#" class="text-lg text-gray-800 hover:text-purple-500 transition" onclick="loadVideo('ach-sp')">¿Me acaba de lanzar un piropo en español?</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Video Player (Right) -->
+                    <div class="flex-1 bg-white shadow-md rounded-lg p-6">
+                        <h2 id="videoTitle" class="text-3xl font-semibold text-gray-800 mb-6">Select A Video</h2>
+
+                        <!-- Video Player -->
+                        <div id="videoZone" class="mb-8" style="display: none;">
+                            <div class="relative w-full" style="padding-top: 56.25%;"> <!-- 16:9 Aspect Ratio -->
+                                <iframe id="videoPlayer" 
+                                    class="absolute top-0 left-0 w-full h-full rounded-lg shadow-lg"
+                                    src=""
+                                    title="YouTube video player" 
+                                    frameborder="0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    allowfullscreen>
+                                </iframe>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const SECRET_PASSWORD = "spionirogolubiro";
+
+        document.getElementById("password-input").addEventListener("keypress", (e) => {
+            if (e.key === "Enter") checkPassword();
+        });
+
+        // Check session status on load
+        window.onload = function() {
+            if (sessionStorage.getItem("archives_unlocked") === "true") {
+                document.getElementById("password-overlay").style.display = "none";
+                const content = document.getElementById("archive-content");
+                content.classList.remove("hidden", "fade-in-init");
+                content.classList.add("fade-in-active");
+            }
+        };
+
+        function checkPassword() {
+            const userInput = document.getElementById("password-input").value;
+            const errorMsg = document.getElementById("error-msg");
+
+            if (userInput === SECRET_PASSWORD) {
+                sessionStorage.setItem("archives_unlocked", "true");
+                showContentWithAnimation();
+            } else {
+                errorMsg.classList.remove("hidden");
+                // Shake effect on error
+                const card = document.getElementById("login-card");
+                card.classList.add("translate-x-2");
+                setTimeout(() => card.classList.remove("translate-x-2"), 100);
+                document.getElementById("password-input").value = "";
+            }
+        }
+
+        function showContentWithAnimation() {
+            const overlay = document.getElementById("password-overlay");
+            const content = document.getElementById("archive-content");
+
+            overlay.classList.add("fade-out");
+
+            content.classList.remove("hidden");
+
+            setTimeout(() => {
+                content.classList.add("fade-in-active");
+            }, 100);
+
+            setTimeout(() => {
+                overlay.style.display = "none";
+            }, 800);
+        }
+    </script>
+
+    <script src="assets/js/videoPlayer.js"></script>
+</body>
+</html>
