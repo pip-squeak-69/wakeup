@@ -16,6 +16,18 @@ const videoData = {
     "ht-1": {
         title: "Intro to Heat Transfer",
         youtubeId: "2T93-VQlZgE"
+    },
+    "ach-dy": {
+        title: "Dumpy Yap During Heat Transfer",
+        youtubeId: "WqCJ43SKyBk"
+    },
+    "ach-mmd": {
+        title: "Mac's Mating Dance",
+        youtubeId: "DY6w4IHkHDs"
+    },
+    "ach-sp": {
+        title: "Did He Just Catcall Me in Spanish?",
+        youtubeId: "qxG7_2k_fRU"
     }
 };
 
